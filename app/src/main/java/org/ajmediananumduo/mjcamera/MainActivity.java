@@ -27,7 +27,5 @@ public class MainActivity extends AppCompatActivity {
     public void love (int man, int woman){
         double hug = man+woman;
         double dating = (man-1)+(woman+1);
-
-        
     }
 }
