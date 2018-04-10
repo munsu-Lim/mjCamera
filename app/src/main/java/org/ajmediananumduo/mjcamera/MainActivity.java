@@ -12,4 +12,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    public void love (int man, int woman){
+        double hug = man+woman;
+        double dating = (man-1)+(woman+1);
+
+        
+    }
 }
