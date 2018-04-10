@@ -22,5 +22,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"테스트메소드입니다",Toast.LENGTH_SHORT).show();
             }
         });
+
+        
+        testbutton.setText("와우");
     }
 }
