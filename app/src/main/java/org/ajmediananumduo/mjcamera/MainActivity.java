@@ -3,6 +3,7 @@ package org.ajmediananumduo.mjcamera;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.support.annotation.NonNull;
@@ -22,21 +23,20 @@ import android.widget.TextView;
 import org.ajmediananumduo.mjcamera.Camera.PropertyActivity;
 import org.ajmediananumduo.mjcamera.Camera.Size;
 import org.ajmediananumduo.mjcamera.Camera.mjCamera;
+import org.ajmediananumduo.mjcamera.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.ShutterCallback{
 
     private final String TAG = MainActivity.class.getSimpleName();
-    private SurfaceView surfaceView;
-
-    private org.ajmediananumduo.mjcamera.Camera.mjCamera mjCamera;
+    private ActivityMainBinding mainBinding;
+    private mjCamera mjCamera;
     private SurfaceHolder surfaceHolder;
     private TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-        surfaceView = findViewById(R.id.surfaceView);
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         textView= (TextView)findViewById(R.id.textView1);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             setCameraAPI21();
         }*/
 
-        findViewById(R.id.textView_properties).setOnClickListener(new View.OnClickListener() {
+        mainBinding.textViewProperties.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), PropertyActivity.class).putExtra("cameraParameters", mjCamera.getCameraParameters()));
@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void init() {
-        surfaceHolder =  surfaceView.getHolder();
+        surfaceHolder =  mainBinding.surfaceView.getHolder();
         surfaceHolder.addCallback(this);
 
-        findViewById(R.id.button_shutter).setOnClickListener(new View.OnClickListener() {
+        mainBinding.buttonShutter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mjCamera.takePicture();
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         //셔터 callback 처리와 동시에 셔터음을 발생시킬 수 있다.
 
         mjCamera.setShutterCallback(this);
-        mjCamera.start(surfaceView);
+        mjCamera.start(mainBinding.surfaceView);
     }
 
     @Override

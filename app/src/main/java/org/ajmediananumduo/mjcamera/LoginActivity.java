@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import org.ajmediananumduo.mjcamera.Camera.RegisterActivity;
-
 public class LoginActivity extends AppCompatActivity {
 
     @Override
