@@ -1,11 +1,16 @@
 package org.ajmediananumduo.mjcamera;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,12 +23,18 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.ajmediananumduo.mjcamera.Camera.PropertyActivity;
 import org.ajmediananumduo.mjcamera.Camera.Size;
 import org.ajmediananumduo.mjcamera.Camera.mjCamera;
+import org.ajmediananumduo.mjcamera.Filter.filterActivity;
 import org.ajmediananumduo.mjcamera.databinding.ActivityMainBinding;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.ShutterCallback{
 
@@ -37,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         super.onCreate(savedInstanceState);
 
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        textView= (TextView)findViewById(R.id.textView1);
+        textView= mainBinding.textView1;
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -56,7 +67,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         else {
             setCameraAPI21();
         }*/
-
+        mainBinding.galleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent filterintent=new Intent(getApplicationContext(),filterActivity.class);
+                    startActivity(filterintent);
+            }
+        });
         mainBinding.textViewProperties.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,4 +149,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void onShutter() {
         //처리
     }
+
+
+
+
 }

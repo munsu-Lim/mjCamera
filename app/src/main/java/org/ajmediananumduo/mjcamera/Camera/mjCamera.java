@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -164,7 +166,18 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
                     String desc_filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".jpg";
                     FileOutputStream outputStream = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/Download/"+
                     desc_filename));
-
+                    /*
+                    int exifOrientation;
+                    int exifDegree;
+                    exif
+                    if (exif != null) {
+                        exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                        exifDegree = exifOrientationToDegrees(exifOrientation);
+                    } else {
+                        exifDegree = 0;
+                    }
+                    rotate(bitmap,)
+                    */
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+ Environment.getExternalStorageDirectory()+"/Download/"+desc_filename)));
 
@@ -181,4 +194,21 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
             }
         });
     }
+    private int CameraOrientationToDegrees(int cameraOrientation) {
+        if (cameraOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (cameraOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (cameraOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    private Bitmap rotate(Bitmap bitmap, float degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
 }
