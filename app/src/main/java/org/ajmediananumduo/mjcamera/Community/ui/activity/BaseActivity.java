@@ -10,6 +10,7 @@ import org.ajmediananumduo.mjcamera.R;
 import butterknife.ButterKnife;
 import butterknife.BindView;
 
+
 public class BaseActivity extends AppCompatActivity {
 
     @Nullable
