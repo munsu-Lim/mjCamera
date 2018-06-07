@@ -74,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                     startActivity(filterintent);
             }
         });
+        mainBinding.communityButto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), org.ajmediananumduo.mjcamera.Community.ui.activity.MainActivity.class));
+                finish();
+            }
+        });
         mainBinding.textViewProperties.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
