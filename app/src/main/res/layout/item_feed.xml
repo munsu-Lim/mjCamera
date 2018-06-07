@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/feed_top" />
 
-        <io.mp.ui.view.SquaredFrameLayout
+        <org.ajmediananumduo.mjcamera.Community.ui.view.SquaredFrameLayout
             android:id="@+id/vImageRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -45,7 +45,7 @@
                 android:src="@drawable/ic_heart_outline_white"
                 android:visibility="invisible" />
 
-        </io.mp.ui.view.SquaredFrameLayout>
+        </org.ajmediananumduo.mjcamera.Community.ui.view.SquaredFrameLayout>
 
         <ImageView
             android:id="@+id/ivFeedBottom"

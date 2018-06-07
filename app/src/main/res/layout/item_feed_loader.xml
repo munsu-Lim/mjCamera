@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/feed_top" />
 
-        <io.mp.ui.view.SquaredFrameLayout
+        <org.ajmediananumduo.mjcamera.Community.ui.view.SquaredFrameLayout
             android:id="@+id/vImageRoot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -51,13 +51,13 @@
                 android:layout_height="match_parent"
                 android:background="#77ffffff" />
 
-            <io.mp.ui.view.SendingProgressView
+            <org.ajmediananumduo.mjcamera.Community.ui.view.SendingProgressView
                 android:id="@+id/vSendingProgress"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center" />
 
-        </io.mp.ui.view.SquaredFrameLayout>
+        </org.ajmediananumduo.mjcamera.Community.ui.view.SquaredFrameLayout>
 
         <ImageView
             android:id="@+id/ivFeedBottom"

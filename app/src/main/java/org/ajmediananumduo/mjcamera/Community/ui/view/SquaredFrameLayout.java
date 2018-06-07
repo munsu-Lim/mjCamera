@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-
+//정사각형 레이아웃 '틀'
 public class SquaredFrameLayout extends FrameLayout {
     public SquaredFrameLayout(Context context) {
         super(context);

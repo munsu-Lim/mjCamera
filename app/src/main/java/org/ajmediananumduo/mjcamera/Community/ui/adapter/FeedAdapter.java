@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextSwitcher;
-
 import org.ajmediananumduo.mjcamera.R;
 import org.ajmediananumduo.mjcamera.Community.ui.activity.MainActivity;
 import org.ajmediananumduo.mjcamera.Community.ui.view.LoadingFeedItemView;
@@ -19,8 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-//import io.mp.ui.activity.MainActivity;
-//import io.mp.ui.view.LoadingFeedItemView;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button";
@@ -40,16 +37,17 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
     }
 
-    @Override
+    //뷰홀더생성
+   @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         if (viewType == VIEW_TYPE_DEFAULT) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_feed, parent, false);
             CellFeedViewHolder cellFeedViewHolder = new CellFeedViewHolder(view);
             setupClickableViews(view, cellFeedViewHolder);
             return cellFeedViewHolder;
         } else if (viewType == VIEW_TYPE_LOADER) {
-            org.ajmediananumduo.mjcamera.Community.ui.view.LoadingFeedItemView view
-                    = new org.ajmediananumduo.mjcamera.Community.ui.view.LoadingFeedItemView(context);
+            LoadingFeedItemView view = new LoadingFeedItemView(context);
             view.setLayoutParams(new LinearLayoutCompat.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT)
