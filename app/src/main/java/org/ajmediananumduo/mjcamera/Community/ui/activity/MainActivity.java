@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import org.ajmediananumduo.mjcamera.Community.ui.adapter.FeedAdapter;
 import org.ajmediananumduo.mjcamera.R;
@@ -36,7 +37,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
         setupFeed();
 
         if (savedInstanceState == null) {
@@ -129,6 +130,12 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION, startingLocation[1]);
         startActivity(intent);
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        return super.onOptionsItemSelected(item);
     }
 
     public void showLikedSnackbar() {
