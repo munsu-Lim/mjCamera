@@ -17,7 +17,6 @@ import butterknife.BindView;
 import org.ajmediananumduo.mjcamera.Community.Utils;
 //import io.mp.Utils;
 //import io.mp.ui.adapter.FeedItemAnimator;
-//CommunityActivity
 
 
 public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener{

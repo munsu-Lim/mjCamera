@@ -1,4 +1,4 @@
-package io.mp;
+package org.ajmediananumduo.mjcamera.Community;
 
 import android.app.Application;
 

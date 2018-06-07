@@ -53,7 +53,7 @@
                 android:textColor="#555555"
                 android:textSize="14sp" />
 
-            <io.mp.ui.view.SendCommentButton
+            <org.ajmediananumduo.mjcamera.Community.ui.view.SendCommentButton
                 android:id="@+id/btnSendComment"
                 android:layout_width="72dp"
                 android:layout_height="match_parent"

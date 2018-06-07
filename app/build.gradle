@@ -45,14 +45,4 @@ dependencies {
     implementation files('src/nineoldandroids-2.4.0/nineoldandroids-2.4.0.jar')
 
 }
-//강제컴파일
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '25.3.0'
-            }
-        }
-    }
-}
+
