@@ -1,9 +1,7 @@
 package com.zomato.photofilters.imageprocessors;
 
 
-/**
- * @author Varun on 30/06/15.
- */
+
 public final class NativeImageProcessor {
     private NativeImageProcessor() {
     }

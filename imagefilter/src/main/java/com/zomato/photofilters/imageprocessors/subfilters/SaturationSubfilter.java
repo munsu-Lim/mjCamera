@@ -5,9 +5,7 @@ import com.zomato.photofilters.imageprocessors.ImageProcessor;
 import com.zomato.photofilters.imageprocessors.SubFilter;
 
 
-/**
- * @author varun on 28/07/15.
- */
+
 public class SaturationSubfilter implements SubFilter {
     private static String tag = "";
 

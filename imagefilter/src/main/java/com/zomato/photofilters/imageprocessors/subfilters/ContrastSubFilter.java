@@ -6,10 +6,6 @@ import com.zomato.photofilters.imageprocessors.ImageProcessor;
 import com.zomato.photofilters.imageprocessors.SubFilter;
 
 
-/**
- * @author varun
- *         Class to add Contrast Subfilter
- */
 public class ContrastSubFilter implements SubFilter {
 
     private static String tag = "";

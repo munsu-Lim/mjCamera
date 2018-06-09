@@ -2,9 +2,7 @@ package com.zomato.photofilters.imageprocessors;
 
 import android.graphics.Bitmap;
 
-/**
- * @author Varun on 29/06/15.
- */
+
 public final class ImageProcessor {
     private ImageProcessor() {
     }

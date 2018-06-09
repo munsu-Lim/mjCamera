@@ -4,9 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Path;
 
-/**
- * @author Varun on 30/06/15.
- */
+
 public final class GeneralUtils {
 
     private GeneralUtils() {

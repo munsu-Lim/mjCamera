@@ -6,9 +6,7 @@ import android.graphics.PathMeasure;
 import android.os.Build;
 import android.view.animation.PathInterpolator;
 
-/**
- * @author Varun on 29/06/15.
- */
+
 public final class BezierSpline {
     private BezierSpline() {
     }
