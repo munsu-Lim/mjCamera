@@ -21,7 +21,6 @@ import org.ajmediananumduo.mjcamera.Community.Utils;
 
 public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener{
     public static final String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
-
     private static final int ANIM_DURATION_TOOLBAR = 300;
 
     @BindView(R.id.rvFeed)

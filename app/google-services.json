@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "48535120577",
+    "firebase_url": "https://mjcamera-2aa3a.firebaseio.com",
+    "project_id": "mjcamera-2aa3a",
+    "storage_bucket": "mjcamera-2aa3a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48535120577:android:745ffe0b7bb8aad7",
+        "android_client_info": {
+          "package_name": "org.ajmediananumduo.mjcamera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48535120577-9nhasbd0dl93f6j4djbmrvh5afqej55j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.ajmediananumduo.mjcamera",
+            "certificate_hash": "e702542fa5edd9f1db8d708abfec920cee3a4f67"
+          }
+        },
+        {
+          "client_id": "48535120577-0e0ahltgounn9i4aai3mf82sbugu6nr9.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "48535120577-0e0ahltgounn9i4aai3mf82sbugu6nr9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdhCL_MT1nCmJxIIDa61kQwGUQNrXyAPw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48535120577-0e0ahltgounn9i4aai3mf82sbugu6nr9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
