@@ -18,7 +18,7 @@ public class SaturationSubfilter implements SubFilter {
 
     @Override
     public Bitmap process(Bitmap inputImage) {
-        return ImageProcessor.doSaturation(inputImage, level);
+        return ImageProcessor.doSaturation(level,inputImage);
     }
 
     @Override

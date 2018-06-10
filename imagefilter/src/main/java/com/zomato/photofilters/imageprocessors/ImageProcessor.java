@@ -70,7 +70,7 @@ public final class ImageProcessor {
         return inputImage;
     }
 
-    public static Bitmap doSaturation(Bitmap inputImage, float level) {
+    public static Bitmap doSaturation(float level,Bitmap inputImage) {
         int width = inputImage.getWidth();
         int height = inputImage.getHeight();
         int[] pixels = new int[width * height];

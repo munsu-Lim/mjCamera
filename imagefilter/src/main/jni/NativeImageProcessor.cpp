@@ -386,7 +386,7 @@ Java_com_zomato_photofilters_imageprocessors_NativeImageProcessor_doColorOverlay
 
 JNIEXPORT jintArray
 Java_com_zomato_photofilters_imageprocessors_NativeImageProcessor_doSaturation(JNIEnv *env, jobject thiz,
-                                                                               jintArray pixels, float level,
+                                                                               jintArray pixels, jfloat level,
                                                                                jint width, jint height) {
     jint *pixelsBuff = getPointerArray(env, pixels);
     saturation(pixelsBuff, level, width, height);
