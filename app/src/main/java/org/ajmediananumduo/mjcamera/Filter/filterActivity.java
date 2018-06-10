@@ -8,13 +8,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,13 +33,23 @@ import com.zomato.photofilters.imageprocessors.Filter;
 
 import org.ajmediananumduo.mjcamera.R;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+
 public class filterActivity extends AppCompatActivity implements ThumbnailCallback {
+    @Nullable
+    @BindView(R.id.filtertoolbar)
+            Toolbar toolbar;
+
     static {
         System.loadLibrary("NativeImageProcessor");
     }
@@ -40,16 +60,46 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
     private Bitmap imageBitmap;
     final int REQ_CODE_SELECT_IMAGE=100;
     private int imageCondition=0;
+    private boolean isChange;
+    private Bitmap ChangedBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         activity = this;
-
-
+        isChange=false;
         initUIWidgets();
-
+        ImageButton button = findViewById(R.id.filterback);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        ImageButton button1 = findViewById(R.id.btnSave);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isChange){
+                    try {
+                        String desc_filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".jpg";
+                        FileOutputStream outputStream = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/Download/"+
+                                desc_filename));
+                        ChangedBitmap = Bitmap.createScaledBitmap(ChangedBitmap,ChangedBitmap.getWidth()-1,ChangedBitmap.getHeight()-1,false);
+                        ChangedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+ Environment.getExternalStorageDirectory()+"/Download/"+desc_filename)));
+                        outputStream.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    isChange=false;
+                    imageBitmap=ChangedBitmap;
+                }
+            }
+        });
     }
 
     private void initUIWidgets() {
@@ -68,6 +118,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
     }
 
     private void initHorizontalList() {
+        Toast.makeText(getApplicationContext(),"initHorizontalList",Toast.LENGTH_SHORT).show();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         layoutManager.scrollToPosition(0);
@@ -105,10 +156,11 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
 
     @Override
     public void onThumbnailClick(Filter filter) {
-        if(imageBitmap.getHeight()>2000|imageBitmap.getWidth()>2000){
-        placeHolderImageView.setImageBitmap(filter.processFilter(Bitmap.createScaledBitmap(imageBitmap, imageBitmap.getWidth()/2, imageBitmap.getHeight()/2, false)));
-        }
-
+        int imageWith =imageBitmap.getWidth();
+        int imageHeight =imageBitmap.getHeight();
+        ChangedBitmap=filter.processFilter(Bitmap.createScaledBitmap(imageBitmap,imageWith+1,imageHeight+1,false));
+        placeHolderImageView.setImageBitmap(ChangedBitmap);
+        isChange=true;
     }
 
     @Override
@@ -132,15 +184,12 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
             {
 
                 try {
-
-
                     //이미지 데이터를 비트맵으로 받아온다.
                     imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                     placeHolderImageView.setImageBitmap(imageBitmap);
                     imageCondition=1;
                     initHorizontalList();
                     Toast.makeText(this,"진입함",Toast.LENGTH_SHORT).show();
-
 
                     //인텐트로 보내기
 
@@ -174,6 +223,9 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
                 }
 
             }
+            else if(resultCode==0){
+                finish();
+            }
 
         }
 
@@ -206,4 +258,6 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
         return imgName;
 
     }
+
+
 }
