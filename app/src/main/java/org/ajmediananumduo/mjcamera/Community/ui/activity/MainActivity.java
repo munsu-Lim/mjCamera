@@ -2,19 +2,35 @@ package org.ajmediananumduo.mjcamera.Community.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import org.ajmediananumduo.mjcamera.Community.ui.adapter.FeedAdapter;
+import org.ajmediananumduo.mjcamera.Manifest;
 import org.ajmediananumduo.mjcamera.R;
 import butterknife.BindView;
 import org.ajmediananumduo.mjcamera.Community.Utils;
+
+import java.io.File;
 //import io.mp.Utils;
 //import io.mp.ui.adapter.FeedItemAnimator;
 
@@ -22,9 +38,11 @@ import org.ajmediananumduo.mjcamera.Community.Utils;
 public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener{
     public static final String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
     private static final int ANIM_DURATION_TOOLBAR = 300;
+    private static final int GALLERY_CODE = 111;
+    private FirebaseStorage storage;
 
     @BindView(R.id.rvFeed)
-    RecyclerView rvFeed;
+    RecyclerView mjFeed;
     @BindView(R.id.content)
     CoordinatorLayout clContent;
 
@@ -37,7 +55,9 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         setupFeed();
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},0);
+        }
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
         } else {
@@ -52,12 +72,12 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
                 return 300;
             }
         };
-        rvFeed.setLayoutManager(linearLayoutManager);
+        mjFeed.setLayoutManager(linearLayoutManager);
 
         feedAdapter = new FeedAdapter(this);
         feedAdapter.setOnFeedItemClickListener(this);
-        rvFeed.setAdapter(feedAdapter);
-        rvFeed.setItemAnimator(new org.ajmediananumduo.mjcamera.Community.ui.adapter.FeedItemAnimator());
+        mjFeed.setAdapter(feedAdapter);
+        mjFeed.setItemAnimator(new org.ajmediananumduo.mjcamera.Community.ui.adapter.FeedItemAnimator());
     }
 
     @Override
@@ -72,7 +92,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                rvFeed.smoothScrollToPosition(0);
+                mjFeed.smoothScrollToPosition(0);
                 feedAdapter.showLoadingView();
             }
         }, 500);
@@ -125,13 +145,8 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         overridePendingTransition(0, 0);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-        return super.onOptionsItemSelected(item);
-    }
-
     public void showLikedSnackbar() {
         //Snackbar.make(clContent, "좋아요 눌림", Snackbar.LENGTH_SHORT).show();
     }
+
 }

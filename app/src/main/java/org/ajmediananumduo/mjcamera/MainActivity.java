@@ -26,18 +26,13 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.ajmediananumduo.mjcamera.Camera.PropertyActivity;
 import org.ajmediananumduo.mjcamera.Camera.Size;
 import org.ajmediananumduo.mjcamera.Camera.mjCamera;
 import org.ajmediananumduo.mjcamera.Filter.filterActivity;
 import org.ajmediananumduo.mjcamera.databinding.ActivityMainBinding;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.ShutterCallback{
 
