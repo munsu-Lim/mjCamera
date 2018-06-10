@@ -4,15 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_light"
-    tools:context=".MainActivity">
+    tools:context=".Filter.filterActivity">
 
+
+    <RelativeLayout
+        android:id="@+id/btnlayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/style_color_primary">
+
+        <ImageButton
+            android:id="@+id/filterback"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_arrow_back_white_24dp" />
+
+        <TextView
+            android:id="@+id/filterbartitle"
+            android:layout_width="252dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:text="filter"
+            android:textColor="#fff"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/btnSave"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/ic_inbox_white" />
+    </RelativeLayout> />
 
     <ImageView
         android:id="@+id/place_holder_imageview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/btnlayout"
         android:background="@android:color/background_light"
         android:scaleType="fitStart" />
 
