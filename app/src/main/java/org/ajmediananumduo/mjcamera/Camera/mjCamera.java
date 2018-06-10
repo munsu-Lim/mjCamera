@@ -28,7 +28,7 @@ import java.util.List;
 public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback {
 
     private final String TAG = mjCamera.class.getSimpleName();
-
+    private int cameraRotation=0;
     private Context context;
     private Camera camera;
     private int previewheight =0;
@@ -138,8 +138,9 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
         return (previewwidth /(double) previewheight);
     }
 
-    public void takePicture() {
+    public void takePicture(int rotation) {
         camera.autoFocus(this);
+        cameraRotation=rotation;
     }
 
     @Override
@@ -176,8 +177,9 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
                     } else {
                         exifDegree = 0;
                     }
-                    rotate(bitmap,)
                     */
+                    bitmap=rotate(bitmap,cameraRotation);
+                    Log.i("Test" , "orientation : " +cameraRotation);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+ Environment.getExternalStorageDirectory()+"/Download/"+desc_filename)));
 
@@ -194,21 +196,18 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
             }
         });
     }
-    private int CameraOrientationToDegrees(int cameraOrientation) {
-        if (cameraOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            return 90;
-        } else if (cameraOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            return 180;
-        } else if (cameraOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            return 270;
-        }
-        return 0;
-    }
 
-    private Bitmap rotate(Bitmap bitmap, float degree) {
+    private Bitmap rotate(Bitmap bitmap, int degree) {
+        if(degree==270){
+            degree=90;
+        }
+        else if(degree==90){
+            degree=270;
+        }
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
+
 
 }
