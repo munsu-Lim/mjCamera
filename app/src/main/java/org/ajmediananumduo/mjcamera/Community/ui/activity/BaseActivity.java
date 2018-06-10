@@ -1,11 +1,14 @@
 package org.ajmediananumduo.mjcamera.Community.ui.activity;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+
+import org.ajmediananumduo.mjcamera.MainActivity;
 import org.ajmediananumduo.mjcamera.R;
 import butterknife.ButterKnife;
 import butterknife.BindView;
@@ -41,9 +44,26 @@ public class BaseActivity extends AppCompatActivity {
     protected void setupToolbar() {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
-            toolbar.setNavigationIcon(R.drawable.camera);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.camera);
           //  toolbar.setNavigationIcon(R.drawable.upload);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id)
+        {
+            case android.R.id.home:
+            {
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
