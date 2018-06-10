@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.ajmediananumduo.mjcamera.MainActivity;
 import org.ajmediananumduo.mjcamera.R;
@@ -23,8 +26,6 @@ public class BaseActivity extends AppCompatActivity {
     @Nullable
     @BindView(R.id.ivLogo) //logo
     ImageView ivLogo;
-
-    private MenuItem inboxMenuItem;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -53,6 +54,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Toast.makeText(getApplicationContext(),id+"",Toast.LENGTH_SHORT).show();
         switch (id)
         {
             case android.R.id.home:
@@ -68,19 +70,13 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        //inboxMenuItem.setActionView(R.layout.menu_item_view);
-        inboxMenuItem = menu.findItem(R.id.action_inbox);
-        inboxMenuItem.setActionView(R.layout.menu_item_view);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
         return true;
     }
 
     public Toolbar getToolbar() {
         return toolbar;
-    }
-
-    public MenuItem getInboxMenuItem() {
-        return inboxMenuItem;
     }
 
     public ImageView getIvLogo() {

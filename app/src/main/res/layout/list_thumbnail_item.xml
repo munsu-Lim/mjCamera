@@ -4,11 +4,25 @@
     android:layout_height="wrap_content"
     android:background="@android:color/background_light">
 
-    <ImageView
-        android:id="@+id/thumbnail"
-        android:layout_width="@dimen/thumbnail_size"
-        android:layout_height="@dimen/thumbnail_size"
-        android:paddingLeft="@dimen/thumbnail_horizontal_padding"
-        android:paddingRight="@dimen/thumbnail_horizontal_padding" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/thumbnailtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="TextView" />
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/thumbnail_size"
+            android:paddingLeft="@dimen/thumbnail_horizontal_padding"
+            android:paddingRight="@dimen/thumbnail_horizontal_padding" />
+    </LinearLayout>
 
 </LinearLayout>

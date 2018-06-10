@@ -93,7 +93,6 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         int actionbarSize = org.ajmediananumduo.mjcamera.Community.Utils.dpToPx(56);
         getToolbar().setTranslationY(-actionbarSize);
         getIvLogo().setTranslationY(-actionbarSize);
-        getInboxMenuItem().getActionView().setTranslationY(-actionbarSize);
 
         getToolbar().animate()
                 .translationY(0)
@@ -102,11 +101,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         getIvLogo().animate()
                 .translationY(0)
                 .setDuration(ANIM_DURATION_TOOLBAR)
-                .setStartDelay(400);
-        getInboxMenuItem().getActionView().animate()
-                .translationY(0)
-                .setDuration(ANIM_DURATION_TOOLBAR)
-                .setStartDelay(500)
+                .setStartDelay(400)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {

@@ -25,17 +25,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name=".MainActivity" android:screenOrientation="landscape">
+
+        </activity>
         <activity
             android:name=".Community.ui.activity.CommentsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity android:name=".Camera.PropertyActivity"></activity>
         <activity android:name=".LoginActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
 
         <activity android:name=".RegisterActivity"></activity>
     </application>
