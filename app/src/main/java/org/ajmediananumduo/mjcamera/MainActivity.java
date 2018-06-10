@@ -2,8 +2,10 @@ package org.ajmediananumduo.mjcamera;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -18,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -43,12 +46,20 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private mjCamera mjCamera;
     private SurfaceHolder surfaceHolder;
     private TextView textView;
+    boolean[] state;
+    private int rotation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        state = new boolean[4];
+        for(int i= 0;i<state.length;i++) {
+            state[0] = false;
+        }
+        rotation=270;
         super.onCreate(savedInstanceState);
 
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         textView= mainBinding.textView1;
+        mainBinding.galleryButton.setRotation(270);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -87,6 +98,47 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 startActivity(new Intent(getApplicationContext(), PropertyActivity.class).putExtra("cameraParameters", mjCamera.getCameraParameters()));
             }
         });
+
+        OrientationEventListener oel = new OrientationEventListener(getApplicationContext()) {
+
+            @Override
+            public void onOrientationChanged(int orientation) {
+                if (orientation >= 80&&orientation<=100&&state[0]==false) {
+                   // Toast.makeText(getApplicationContext(), "LandScape2",         Toast.LENGTH_SHORT).show();
+                    rotation=180;
+                    mainBinding.galleryButton.setRotation(rotation);
+                    state[0]=true;
+                    state[1]=false;
+                    state[2]=false;
+                    state[3]=false;
+                } else if ((orientation <= 10||orientation>=350)&&state[1]==false) {
+                   // Toast.makeText(getApplicationContext(), "Portrait1",         Toast.LENGTH_SHORT).show();
+                    rotation=270;
+                    mainBinding.galleryButton.setRotation(rotation);
+                    state[0]=false;
+                    state[1]=true;
+                    state[2]=false;
+                    state[3]=false;
+                } else if((orientation >= 260&&orientation<=280&&state[2]==false)){
+                    //Toast.makeText(getApplicationContext(), "LandScape1",         Toast.LENGTH_SHORT).show();
+                    rotation=0;
+                    mainBinding.galleryButton.setRotation(rotation);
+                    state[0]=false;
+                    state[1]=false;
+                    state[2]=true;
+                    state[3]=false;
+                } else if((orientation >= 170&&orientation<=190&&state[3]==false)){
+                    //Toast.makeText(getApplicationContext(), "Portrait2",         Toast.LENGTH_SHORT).show();
+                    rotation=90;
+                    mainBinding.galleryButton.setRotation(rotation);
+                    state[0]=false;
+                    state[1]=false;
+                    state[2]=false;
+                    state[3]=true;
+                }
+            }
+        };
+        oel.enable();
     }
 
     private void init() {
@@ -96,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         mainBinding.buttonShutter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mjCamera.takePicture();
+                mjCamera.takePicture(rotation);
             }
         });
     }
@@ -156,8 +208,4 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     public void onShutter() {
         //처리
     }
-
-
-
-
 }
