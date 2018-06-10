@@ -46,9 +46,6 @@ import java.util.Map;
 import butterknife.BindView;
 
 public class filterActivity extends AppCompatActivity implements ThumbnailCallback {
-    @Nullable
-    @BindView(R.id.filtertoolbar)
-            Toolbar toolbar;
 
     static {
         System.loadLibrary("NativeImageProcessor");
