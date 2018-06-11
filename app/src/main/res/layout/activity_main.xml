@@ -8,18 +8,20 @@
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/cardview_light_background"
         tools:context=".MainActivity">
 
         <FrameLayout
             android:id="@+id/framelay"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:layout_height="match_parent">
+            android:background="@android:color/background_dark">
 
             <SurfaceView
                 android:id="@+id/surfaceView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
         </FrameLayout>
 
 
@@ -78,7 +80,16 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginBottom="29dp"
                 android:layout_marginEnd="13dp"
-                app:srcCompat="@drawable/album" />
+                app:srcCompat="@drawable/ic_album" />
+
+            <ImageView
+                android:id="@+id/changeButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/galleryButton"
+                android:layout_marginStart="13dp"
+                app:srcCompat="@drawable/ic_exchange_white" />
 
             <ImageView
                 android:id="@+id/communityButto"
@@ -88,8 +99,16 @@
                 android:layout_alignStart="@+id/galleryButton"
                 android:layout_marginEnd="13dp"
                 android:layout_marginTop="29dp"
-                app:srcCompat="@android:drawable/alert_light_frame" />
+                app:srcCompat="@drawable/ic_communitybtn" />
 
+            <ImageView
+                android:id="@+id/optionButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/changeButton"
+                android:layout_marginTop="29dp"
+                app:srcCompat="@drawable/ic_settings_white" />
         </RelativeLayout>
 
     </RelativeLayout>
