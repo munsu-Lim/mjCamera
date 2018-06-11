@@ -74,7 +74,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
                 finish();
             }
         });
-        ImageButton button1 = findViewById(R.id.btnSave);
+        ImageView button1 = findViewById(R.id.btnSave);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
