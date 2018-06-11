@@ -44,6 +44,9 @@
         <activity android:name=".Community.ui.activity.BaseActivity"/>
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".Community.ui.activity.UploadActivity"/>
+        <activity android:name=".Community.ui.activity.test">
+
+        </activity>
     </application>
 
 </manifest>

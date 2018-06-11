@@ -2,51 +2,49 @@ package org.ajmediananumduo.mjcamera.Community.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import org.ajmediananumduo.mjcamera.Community.ui.adapter.FeedAdapter;
-import org.ajmediananumduo.mjcamera.Manifest;
 import org.ajmediananumduo.mjcamera.R;
 import butterknife.BindView;
-import org.ajmediananumduo.mjcamera.Community.Utils;
-
-import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 //import io.mp.Utils;
 //import io.mp.ui.adapter.FeedItemAnimator;
-
 
 public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFeedItemClickListener{
     public static final String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
     private static final int ANIM_DURATION_TOOLBAR = 300;
-    private static final int GALLERY_CODE = 111;
     private FirebaseStorage storage;
-
+    private FirebaseDatabase database=FirebaseDatabase.getInstance();
     @BindView(R.id.rvFeed)
     RecyclerView mjFeed;
     @BindView(R.id.content)
     CoordinatorLayout clContent;
 
     private FeedAdapter feedAdapter;
+    private List<ImageDTO> imageDTOs = new ArrayList<>();
+    private List<FeedItem> imageFeeds = new ArrayList<>();
+    private List<String> uidLists = new ArrayList<>();
 
     private boolean pendingIntroAnimation;
 
@@ -54,17 +52,36 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        setupFeed();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},0);
         }
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
         } else {
-            feedAdapter.updateItems(false);
+           // feedAdapter.updateItems(false);
         }
+        final ValueEventListener images = database.getReference().child("images").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                imageDTOs.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ImageDTO imageDTO = snapshot.getValue(ImageDTO.class);
+                    imageDTOs.add(0,imageDTO);
+                }
+                feedAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        setupFeed();
     }
 
+    //매니저를 통해 피드생성
     private void setupFeed() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
             @Override
@@ -74,10 +91,13 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
         };
         mjFeed.setLayoutManager(linearLayoutManager);
 
-        feedAdapter = new FeedAdapter(this);
+        feedAdapter = new FeedAdapter(getApplicationContext(),imageDTOs);
         feedAdapter.setOnFeedItemClickListener(this);
         mjFeed.setAdapter(feedAdapter);
-        mjFeed.setItemAnimator(new org.ajmediananumduo.mjcamera.Community.ui.adapter.FeedItemAnimator());
+        //변경
+
+
+        mjFeed.setItemAnimator(new FeedAdapter.FeedItemAnimator());
     }
 
     @Override
@@ -132,7 +152,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     }
 
     private void startContentAnimation() {
-        feedAdapter.updateItems(true);
+        //feedAdapter.updateItems(true);
     }
 
     @Override
@@ -148,5 +168,4 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     public void showLikedSnackbar() {
         //Snackbar.make(clContent, "좋아요 눌림", Snackbar.LENGTH_SHORT).show();
     }
-
 }

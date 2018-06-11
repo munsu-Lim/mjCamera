@@ -9,12 +9,17 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -22,8 +27,8 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.ajmediananumduo.mjcamera.Community.Utils;
-import org.ajmediananumduo.mjcamera.MainActivity;
+import junit.framework.Test;
+
 import org.ajmediananumduo.mjcamera.R;
 import java.io.File;
 import butterknife.BindView;
@@ -33,6 +38,7 @@ import butterknife.BindView;
 public class UploadActivity extends BaseActivity {
 
     private static final int GALLERY_CODE = 1111;
+    private static final String TAG ="MJTEST" ;
     private FirebaseAuth auth= FirebaseAuth.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private String imagePath;
@@ -60,7 +66,6 @@ public class UploadActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-
         //업로드 버튼 리스너
         uploadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,10 +97,13 @@ public class UploadActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GALLERY_CODE) {
-            imagePath=getPath(data.getData());
-            File f= new File(imagePath);
-            imageView.setImageURI(Uri.fromFile(f));
+            if(resultCode==-1) {
+                imagePath = getPath(data.getData());
+                File f = new File(imagePath);
+                imageView.setImageURI(Uri.fromFile(f));
+            }
         }
+
     }
     //경로를 얻어온다
     public String getPath(Uri uri){
@@ -108,29 +116,39 @@ public class UploadActivity extends BaseActivity {
     }
 
     private void upload(String uri){
-
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://mjcamera-2aa3a.appspot.com");
+        final StorageReference storageRef = storage.getReferenceFromUrl("gs://mjcamera-2aa3a.appspot.com");
         Uri file = Uri.fromFile(new File(uri));
         StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
+        Log.i(TAG, "upload: "+"images/"+file.getLastPathSegment());
+        final StorageReference ref = storageRef.child("images/"+file.getLastPathSegment());
+        UploadTask uploadTask = ref.putFile(file);
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return ref.getDownloadUrl();
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                StorageMetadata downloadUrl = taskSnapshot.getMetadata();
-                ImageDTO imageDTO = new ImageDTO();
-                imageDTO.imageUrl = downloadUrl.toString();
-                imageDTO.title = filterName.getText().toString();
-                imageDTO.description = description.getText().toString();
-                imageDTO.uid = auth.getCurrentUser().getUid();
-                imageDTO.userId = auth.getCurrentUser().getEmail();
-                database.getReference().child("images").push().setValue(imageDTO);
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    Log.i(TAG, "onComplete: "+downloadUri);
+                    ImageDTO imageDTO = new ImageDTO();
+                    imageDTO.imageUrl = downloadUri.toString();
+                    imageDTO.title = filterName.getText().toString();
+                    imageDTO.description = description.getText().toString();
+                    imageDTO.userId = auth.getCurrentUser().getEmail();
+                    database.getReference().child("images").push().setValue(imageDTO);
+                } else {
+                    // Handle failures
+                    // ...
+                }
             }
         });
         //사진 올린후 다시 커뮤니티로
@@ -138,9 +156,6 @@ public class UploadActivity extends BaseActivity {
         startActivity(cIntent);
         finish();
     }
-
-
-
-
-
 }
+
+
