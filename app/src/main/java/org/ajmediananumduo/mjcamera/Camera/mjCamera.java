@@ -9,6 +9,7 @@ import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -35,14 +36,16 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
     private int previewwidth =0;
     private Camera.ShutterCallback shutterCallback;
 
-    public mjCamera(Context context) {
+    public mjCamera(Context context,int direction) {
         this.context = context;
-        init();
+        init(direction);
     }
 
-    private void init() {
-
-        camera = Camera.open();
+    private void init(int direction) {
+        if (direction==0)
+            camera = Camera.open(0);
+        else
+            camera = Camera.open(1);
     }
 
     public void start(SurfaceView surfaceView) {
@@ -57,6 +60,7 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
 
     public void stop() {
         camera.stopPreview();
+        camera.release();
     }
 
     public void setShutterCallback(Camera.ShutterCallback shutterCallback) {
