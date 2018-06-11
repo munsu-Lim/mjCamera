@@ -9,12 +9,17 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -108,31 +113,40 @@ public class UploadActivity extends BaseActivity {
     }
 
     private void upload(String uri){
-
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://mjcamera-2aa3a.appspot.com");
+        final StorageReference storageRef = storage.getReferenceFromUrl("gs://mjcamera-2aa3a.appspot.com");
         Uri file = Uri.fromFile(new File(uri));
         StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
-        UploadTask uploadTask = riversRef.putFile(file);
+        final StorageReference ref = storageRef.child("images/"+file.getLastPathSegment());
+        UploadTask uploadTask = ref.putFile(file);
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return ref.getDownloadUrl();
             }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                StorageMetadata downloadUrl = taskSnapshot.getMetadata();
-                ImageDTO imageDTO = new ImageDTO();
-                imageDTO.imageUrl = downloadUrl.toString();
-                imageDTO.title = filterName.getText().toString();
-                imageDTO.description = description.getText().toString();
-                imageDTO.uid = auth.getCurrentUser().getUid();
-                imageDTO.userId = auth.getCurrentUser().getEmail();
-                database.getReference().child("images").push().setValue(imageDTO);
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    ImageDTO imageDTO = new ImageDTO();
+                    imageDTO.imageUrl = downloadUri.toString();
+                    imageDTO.title = filterName.getText().toString();
+                    imageDTO.description = description.getText().toString();
+                    imageDTO.userId = auth.getCurrentUser().getEmail();
+                    database.getReference().child("images").push().setValue(imageDTO);
+                } else {
+                    // Handle failures
+                    // ...
+                }
             }
         });
+
         //사진 올린후 다시 커뮤니티로
         Intent cIntent = new Intent(getApplicationContext(), org.ajmediananumduo.mjcamera.Community.ui.activity.MainActivity.class);
         startActivity(cIntent);
