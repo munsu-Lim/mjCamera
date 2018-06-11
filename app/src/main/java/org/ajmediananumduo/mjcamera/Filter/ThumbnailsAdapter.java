@@ -1,14 +1,13 @@
 package org.ajmediananumduo.mjcamera.Filter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.zomato.photofilters.imageprocessors.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nineoldandroids.view.ViewHelper;
 
@@ -47,9 +46,10 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ThumbnailsViewHolder thumbnailsViewHolder = (ThumbnailsViewHolder) holder;
         thumbnailsViewHolder.thumbnail.setImageBitmap(thumbnailItem.image);
         thumbnailsViewHolder.thumbnail.setScaleType(ImageView.ScaleType.FIT_START);
-        thumbnailsViewHolder.textView.setText(thumbnailItem.filter.getName()+"1");
+        thumbnailsViewHolder.titleView.setText(thumbnailItem.filter.getName());
         Log.i(TAG, "filtername:"+thumbnailItem.filter.getName());
         setAnimation(thumbnailsViewHolder.thumbnail, i);
+        setAnimation(thumbnailsViewHolder.titleView, i);
         thumbnailsViewHolder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,12 +77,12 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public static class ThumbnailsViewHolder extends RecyclerView.ViewHolder {
         public ImageView thumbnail;
-        public TextView textView;
+        public TextView titleView;
 
         public ThumbnailsViewHolder(View v) {
             super(v);
             this.thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
-            this.textView = (TextView)v.findViewById(R.id.thumbnailtitle);
+            this.titleView = (TextView)v.findViewById(R.id.thumbnailtitle);
         }
     }
 }

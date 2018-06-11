@@ -50,7 +50,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
     static {
         System.loadLibrary("NativeImageProcessor");
     }
-
+    private String filtername;
     private Activity activity;
     private RecyclerView thumbListView;
     private ImageView placeHolderImageView;
@@ -120,7 +120,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         layoutManager.scrollToPosition(0);
         thumbListView.setLayoutManager(layoutManager);
-        thumbListView.setHasFixedSize(true);
+        //thumbListView.setHasFixedSize(true);
         bindDataToAdapter();
     }
 
@@ -156,6 +156,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
         int imageWith =imageBitmap.getWidth();
         int imageHeight =imageBitmap.getHeight();
         ChangedBitmap=filter.processFilter(Bitmap.createScaledBitmap(imageBitmap,imageWith+1,imageHeight+1,false));
+        filtername=filter.getName();
         placeHolderImageView.setImageBitmap(ChangedBitmap);
         isChange=true;
     }
@@ -187,13 +188,6 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
                     imageCondition=1;
                     initHorizontalList();
                     Toast.makeText(this,"진입함",Toast.LENGTH_SHORT).show();
-
-                    //인텐트로 보내기
-
-
-
-
-                    //Toast.makeText(getBaseContext(), "name_Str : "+name_Str , Toast.LENGTH_SHORT).show();
 
 
 
