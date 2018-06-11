@@ -78,7 +78,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
             public void onClick(View v) {
                 if(isChange){
                     try {
-                        String desc_filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".jpg";
+                        String desc_filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+filtername+".jpg";
                         FileOutputStream outputStream = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/Download/"+
                                 desc_filename));
                         ChangedBitmap = Bitmap.createScaledBitmap(ChangedBitmap,ChangedBitmap.getWidth()-1,ChangedBitmap.getHeight()-1,false);
@@ -120,7 +120,6 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
     }
 
     private void initHorizontalList() {
-        Toast.makeText(getApplicationContext(),"initHorizontalList",Toast.LENGTH_SHORT).show();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         layoutManager.scrollToPosition(0);
@@ -194,7 +193,6 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
                     placeHolderImageView.setImageBitmap(imageBitmap);
                     imageCondition=1;
                     initHorizontalList();
-                    Toast.makeText(this,"진입함",Toast.LENGTH_SHORT).show();
 
 
 
