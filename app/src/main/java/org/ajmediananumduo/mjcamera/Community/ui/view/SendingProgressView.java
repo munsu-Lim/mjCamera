@@ -109,7 +109,7 @@ public class SendingProgressView extends View {
             }
         });
     }
-
+    //progressbar finished
     private void setupDonePaints() {
         doneBgPaint = new Paint();
         doneBgPaint.setAntiAlias(true);
@@ -182,7 +182,7 @@ public class SendingProgressView extends View {
 
         canvas.drawBitmap(tempBitmap, 0, 0, null);
     }
-
+    //생성자로부터 호출
     private void drawArcForCurrentProgress() {
         tempCanvas.drawArc(progressBounds, -90f, 360 * currentProgress / 100, false, progressPaint);
     }

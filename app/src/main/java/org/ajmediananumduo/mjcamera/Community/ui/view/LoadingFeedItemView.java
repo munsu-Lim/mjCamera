@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-
 import org.ajmediananumduo.mjcamera.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -96,20 +96,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "로그인 성공~");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                           // updateUI(user);
+                        if (task.isSuccessful()) { // login success
+                            Toast.makeText(LoginActivity.this, "로그인 성공!",
+                                    Toast.LENGTH_SHORT).show();
                             Intent intent=new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "로그인 실패~", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        } else {  //login fail
+                            Toast.makeText(LoginActivity.this, "로그인 실패!",
                                     Toast.LENGTH_SHORT).show();
-                           // updateUI(null);
                         }
 
                         // ...

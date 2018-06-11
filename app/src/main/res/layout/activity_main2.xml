@@ -32,9 +32,6 @@
                 layout="@layout/view_feed_toolbar" />
         </android.support.design.widget.AppBarLayout>
 
-
-
-
     </android.support.design.widget.CoordinatorLayout>
 
 

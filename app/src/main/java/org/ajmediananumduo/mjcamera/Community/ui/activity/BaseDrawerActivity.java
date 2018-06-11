@@ -1,13 +1,13 @@
 package org.ajmediananumduo.mjcamera.Community.ui.activity;
 
 
+import android.os.Build;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import org.ajmediananumduo.mjcamera.R;
 import butterknife.BindView;
 import butterknife.BindDimen;
-import butterknife.BindString;
 
 public class BaseDrawerActivity extends BaseActivity {
 
@@ -23,6 +23,9 @@ public class BaseDrawerActivity extends BaseActivity {
         ViewGroup viewGroup = (ViewGroup) findViewById(R.id.flContentRoot);
         LayoutInflater.from(this).inflate(layoutResID, viewGroup, true);
         bindViews();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},0);
+        }
     }
 
 
