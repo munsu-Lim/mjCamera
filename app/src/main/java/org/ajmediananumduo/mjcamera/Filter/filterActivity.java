@@ -5,25 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -39,11 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import butterknife.BindView;
 
 public class filterActivity extends AppCompatActivity implements ThumbnailCallback {
 
@@ -57,6 +43,8 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
     private Bitmap imageBitmap;
     final int REQ_CODE_SELECT_IMAGE=100;
     private int imageCondition=0;
+    private ImageView saveButton;
+    private ImageView undoButton;
     private boolean isChange;
     private Bitmap ChangedBitmap;
 
@@ -65,7 +53,6 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         activity = this;
-        isChange=false;
         initUIWidgets();
         ImageButton button = findViewById(R.id.filterback);
         button.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +61,19 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
                 finish();
             }
         });
-        ImageView button1 = findViewById(R.id.btnSave);
-        button1.setOnClickListener(new View.OnClickListener() {
+        undoButton = findViewById(R.id.btnUndo);
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isChange){
+                    placeHolderImageView.setImageBitmap(imageBitmap);
+                }
+                changedIcon();
+            }
+        });
+        saveButton = findViewById(R.id.btnSave);
+        changedIcon();
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isChange){
@@ -92,11 +90,18 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    isChange=false;
+                    changedIcon();
                     imageBitmap=ChangedBitmap;
+                    initHorizontalList();
                 }
             }
         });
+    }
+
+    private void changedIcon() {
+        isChange=false;
+        saveButton.setImageResource(R.drawable.ic_download_darkgray);
+        undoButton.setImageResource(R.drawable.ic_undo_arrow_darkgray);
     }
 
     private void initUIWidgets() {
@@ -120,7 +125,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         layoutManager.scrollToPosition(0);
         thumbListView.setLayoutManager(layoutManager);
-        //thumbListView.setHasFixedSize(true);
+        thumbListView.setHasFixedSize(true);
         bindDataToAdapter();
     }
 
@@ -158,6 +163,8 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
         ChangedBitmap=filter.processFilter(Bitmap.createScaledBitmap(imageBitmap,imageWith+1,imageHeight+1,false));
         filtername=filter.getName();
         placeHolderImageView.setImageBitmap(ChangedBitmap);
+        undoButton.setImageResource(R.drawable.ic_undo_arrow_white);
+        saveButton.setImageResource(R.drawable.ic_download_white);
         isChange=true;
     }
 

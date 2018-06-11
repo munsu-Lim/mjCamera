@@ -34,19 +34,18 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
     private Camera camera;
     private int previewheight =0;
     private int previewwidth =0;
+    private int direction;
     private Camera.ShutterCallback shutterCallback;
 
     public mjCamera(Context context,int direction) {
         this.context = context;
+        this.direction = direction;
         init(direction);
     }
 
     private void init(int direction) {
-        if (direction==0)
-            camera = Camera.open(0);
-        else
-            camera = Camera.open(1);
-    }
+            camera = Camera.open(direction);
+        }
 
     public void start(SurfaceView surfaceView) {
         try {
@@ -202,10 +201,10 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
     }
 
     private Bitmap rotate(Bitmap bitmap, int degree) {
-        if(degree==270){
+        if(degree==270&&direction==0){
             degree=90;
         }
-        else if(degree==90){
+        else if(degree==90&&direction==0){
             degree=270;
         }
         Matrix matrix = new Matrix();

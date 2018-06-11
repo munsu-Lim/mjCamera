@@ -25,7 +25,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.ajmediananumduo.mjcamera.MainActivity;
-import org.ajmediananumduo.mjcamera.Manifest;
 import org.ajmediananumduo.mjcamera.R;
 
 import java.io.File;
