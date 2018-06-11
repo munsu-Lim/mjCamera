@@ -14,6 +14,7 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -24,8 +25,12 @@ import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.ajmediananumduo.mjcamera.Camera.PropertyActivity;
@@ -34,8 +39,10 @@ import org.ajmediananumduo.mjcamera.Camera.mjCamera;
 import org.ajmediananumduo.mjcamera.Filter.filterActivity;
 import org.ajmediananumduo.mjcamera.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.ShutterCallback{
+import butterknife.BindView;
 
+public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.ShutterCallback{
+    ImageView changeButton;
     private final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding mainBinding;
     private mjCamera mjCamera;
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private TextView textView;
     boolean[] state;
     private int rotation;
+    private boolean isBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         state = new boolean[4];
@@ -51,11 +59,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
         rotation=270;
         super.onCreate(savedInstanceState);
-
+        isBack=true;
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         textView= mainBinding.textView1;
         mainBinding.galleryButton.setRotation(270);
-
+        setTheme(android.R.style.Theme_Holo_NoActionBar);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
@@ -93,7 +101,21 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 startActivity(new Intent(getApplicationContext(), PropertyActivity.class).putExtra("cameraParameters", mjCamera.getCameraParameters()));
             }
         });
-
+        mainBinding.changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isBack) {
+                    mjCamera.stop();
+                    setCamera(1);
+                    isBack=false;
+                }
+                else {
+                    mjCamera.stop();
+                    setCamera(0);
+                    isBack=true;
+                }
+            }
+        });
         OrientationEventListener oel = new OrientationEventListener(getApplicationContext()) {
 
             @Override
@@ -101,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 if (orientation >= 80&&orientation<=100&&state[0]==false) {
                    // Toast.makeText(getApplicationContext(), "LandScape2",         Toast.LENGTH_SHORT).show();
                     rotation=180;
-                    mainBinding.galleryButton.setRotation(rotation);
+                    settingrotation(rotation);
                     state[0]=true;
                     state[1]=false;
                     state[2]=false;
@@ -109,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 } else if ((orientation <= 10||orientation>=350)&&state[1]==false) {
                    // Toast.makeText(getApplicationContext(), "Portrait1",         Toast.LENGTH_SHORT).show();
                     rotation=270;
-                    mainBinding.galleryButton.setRotation(rotation);
+                    settingrotation(rotation);
                     state[0]=false;
                     state[1]=true;
                     state[2]=false;
@@ -117,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 } else if((orientation >= 260&&orientation<=280&&state[2]==false)){
                     //Toast.makeText(getApplicationContext(), "LandScape1",         Toast.LENGTH_SHORT).show();
                     rotation=0;
-                    mainBinding.galleryButton.setRotation(rotation);
+                    settingrotation(rotation);
                     state[0]=false;
                     state[1]=false;
                     state[2]=true;
@@ -125,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 } else if((orientation >= 170&&orientation<=190&&state[3]==false)){
                     //Toast.makeText(getApplicationContext(), "Portrait2",         Toast.LENGTH_SHORT).show();
                     rotation=90;
-                    mainBinding.galleryButton.setRotation(rotation);
+                    settingrotation(rotation);
                     state[0]=false;
                     state[1]=false;
                     state[2]=false;
@@ -136,6 +158,12 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         oel.enable();
     }
 
+    private void settingrotation(int rotation) {
+        mainBinding.galleryButton.setRotation(rotation);
+        mainBinding.changeButton.setRotation(rotation);
+        mainBinding.communityButto.setRotation(rotation);
+    }
+
     private void init() {
         surfaceHolder =  mainBinding.surfaceView.getHolder();
         surfaceHolder.addCallback(this);
@@ -144,12 +172,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onClick(View v) {
                 mjCamera.takePicture(rotation);
+                Animation startAnimation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.blink_animation);
+                mainBinding.surfaceView.startAnimation(startAnimation);
             }
         });
     }
 
-    private void setCamera() {
-        mjCamera = new mjCamera(this);
+    private void setCamera(int direction) {
+        mjCamera = new mjCamera(this,direction);
         Size previewsize = new Size(1440,1080);
         mjCamera.setPictureSize(new Size(2880, 2160));
         mjCamera.setPreviewSize(previewsize);
@@ -171,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "surfaceCreated");
-        setCamera();
+        setCamera(0);
     }
 
     @Override
@@ -191,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         if(requestCode == 0) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                setCamera();
+                setCamera(0);
             }
             else {
                 finish();
