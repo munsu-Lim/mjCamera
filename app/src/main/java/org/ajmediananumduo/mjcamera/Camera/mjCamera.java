@@ -35,16 +35,18 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
     private int previewheight =0;
     private int previewwidth =0;
     private int direction;
+    public  boolean changePicture;
     private Camera.ShutterCallback shutterCallback;
 
     public mjCamera(Context context,int direction) {
         this.context = context;
+        changePicture = true;
         this.direction = direction;
         init(direction);
     }
 
     private void init(int direction) {
-            camera = Camera.open(direction);
+        camera = Camera.open(direction);
         }
 
     public void start(SurfaceView surfaceView) {
@@ -89,7 +91,7 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
         return cameraParameter;
     }
 
-    public void setPictureSize(Size pass) {
+    public void setPictureSize(Size setting) {
         Camera.Parameters parameters = camera.getParameters();
         int height=0;
         int width=0;
@@ -99,7 +101,7 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
             sizeList.add(new Size(size.width, size.height));
         }
         for(int i =0;i<sizeList.size();i++) {
-            if(sizeList.get(i).width==2880&&sizeList.get(i).height==2160){
+            if(sizeList.get(i).width==setting.width&&sizeList.get(i).height==setting.height){
                 height = sizeList.get(i).height;
                 width = sizeList.get(i).width;
                 break;
@@ -113,7 +115,7 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
         camera.setParameters(parameters);
     }
 
-    public void setPreviewSize(Size pass){
+    public void setPreviewSize(Size setting){
         Camera.Parameters parameters = camera.getParameters();
 
         List<Size> sizeList = new ArrayList<>();
@@ -122,7 +124,7 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
             sizeList.add(new Size(size.width, size.height));
         }
         for(int i = 0;i<sizeList.size();i++) {
-            if(sizeList.get(i).width==1440&&sizeList.get(i).height==1080){
+            if(sizeList.get(i).width==setting.width&&sizeList.get(i).height==setting.height){
                 previewheight = sizeList.get(i).height;
                 previewwidth = sizeList.get(i).width;
                 break;
@@ -183,7 +185,7 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
                     */
 
                     bitmap=rotate(bitmap,cameraRotation);
-                    if(direction==1){
+                    if(direction==1&&changePicture){
                         Matrix sideInversion = new Matrix();
                         sideInversion.setScale(-1,1);
                         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), sideInversion, true);

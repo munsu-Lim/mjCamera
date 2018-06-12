@@ -36,6 +36,7 @@ import android.widget.TextView;
 import org.ajmediananumduo.mjcamera.Camera.PropertyActivity;
 import org.ajmediananumduo.mjcamera.Camera.Size;
 import org.ajmediananumduo.mjcamera.Camera.mjCamera;
+import org.ajmediananumduo.mjcamera.Camera.optionActivity;
 import org.ajmediananumduo.mjcamera.Filter.filterActivity;
 import org.ajmediananumduo.mjcamera.databinding.ActivityMainBinding;
 
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private TextView textView;
     boolean[] state;
     private int rotation;
+    public boolean isfourthree;
+    public static Context mContext;
     private boolean isBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +60,21 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         for(int i= 0;i<state.length;i++) {
             state[0] = false;
         }
+        mContext=this;
+        isfourthree =true;
         rotation=270;
         super.onCreate(savedInstanceState);
         isBack=true;
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         textView= mainBinding.textView1;
+        ImageView optionButton =mainBinding.optionButton;
+        optionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),optionActivity.class);
+                startActivity(intent);
+            }
+        });
         mainBinding.galleryButton.setRotation(270);
         setTheme(android.R.style.Theme_Holo_NoActionBar);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -180,8 +193,17 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private void setCamera(int direction) {
         mjCamera = new mjCamera(this,direction);
-        Size previewsize = new Size(1440,1080);
-        mjCamera.setPictureSize(new Size(2880, 2160));
+        Size previewsize;
+        Size picturesize;
+        if(isfourthree){
+            previewsize = new Size(1440,1080);
+            picturesize = new Size(2880, 2160);
+        }
+        else{
+            previewsize = new Size(1920,1080);
+            picturesize = new Size(1920, 1080);
+        }
+        mjCamera.setPictureSize(picturesize);
         mjCamera.setPreviewSize(previewsize);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -232,5 +254,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     public void onShutter() {
         //처리
+    }
+    public void optionchanged(){
+        mjCamera.stop();
+        setCamera(0);
+    }
+
+    public mjCamera getCamer(){
+        return mjCamera;
     }
 }
