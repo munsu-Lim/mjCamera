@@ -171,7 +171,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        
+
 
 
         if(requestCode == REQ_CODE_SELECT_IMAGE)
