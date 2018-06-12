@@ -181,7 +181,13 @@ public class mjCamera implements View.OnTouchListener, Camera.AutoFocusCallback 
                         exifDegree = 0;
                     }
                     */
+
                     bitmap=rotate(bitmap,cameraRotation);
+                    if(direction==1){
+                        Matrix sideInversion = new Matrix();
+                        sideInversion.setScale(-1,1);
+                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), sideInversion, true);
+                    }
                     Log.i("Test" , "orientation : " +cameraRotation);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+ Environment.getExternalStorageDirectory()+"/Download/"+desc_filename)));
