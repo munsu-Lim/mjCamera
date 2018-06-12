@@ -171,12 +171,7 @@ public class filterActivity extends AppCompatActivity implements ThumbnailCallba
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-
-
-
-        Toast.makeText(getBaseContext(), "resultCode : "+resultCode,Toast.LENGTH_SHORT).show();
-
+        
 
 
         if(requestCode == REQ_CODE_SELECT_IMAGE)
