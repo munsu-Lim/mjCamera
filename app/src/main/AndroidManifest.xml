@@ -18,10 +18,7 @@
         android:theme="@style/AppTheme.NoActionbar">
 
         <activity android:name=".Community.ui.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".Filter.filterActivity"
             android:screenOrientation="portrait">
@@ -39,14 +36,17 @@
             android:theme="@style/AppTheme.TransparentActivity" />
         <activity android:name=".Camera.PropertyActivity"></activity>
         <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".Community.ui.activity.BaseActivity"/>
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".Community.ui.activity.UploadActivity"/>
-        <activity android:name=".Community.ui.activity.test">
+        <activity android:name=".Camera.optionActivity"></activity>
 
-        </activity>
     </application>
 
 </manifest>
