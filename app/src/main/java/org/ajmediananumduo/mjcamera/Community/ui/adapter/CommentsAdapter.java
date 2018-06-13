@@ -13,7 +13,6 @@ import android.widget.TextView;
 import org.ajmediananumduo.mjcamera.R;
 import butterknife.ButterKnife;
 import butterknife.BindView;
-
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;

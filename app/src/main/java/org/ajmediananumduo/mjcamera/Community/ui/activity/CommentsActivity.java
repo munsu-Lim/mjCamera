@@ -14,7 +14,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
 import org.ajmediananumduo.mjcamera.Community.Utils;
 import org.ajmediananumduo.mjcamera.Community.ui.adapter.CommentsAdapter;
 import org.ajmediananumduo.mjcamera.Community.ui.view.SendCommentButton;

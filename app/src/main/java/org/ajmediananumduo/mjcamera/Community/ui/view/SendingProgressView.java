@@ -19,10 +19,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
-
 import org.ajmediananumduo.mjcamera.R;
-
-
 
 
 public class SendingProgressView extends View {
